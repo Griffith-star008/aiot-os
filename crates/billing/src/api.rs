@@ -1,0 +1,6 @@
+//! Public API Interfaces
+
+//! Billing
+pub struct License { pub key: String, pub valid_until: u64 }
+pub struct Subscription { pub plan: String, pub active: bool }
+pub struct Quota { pub max_devices: u32, pub current_devices: u32 }

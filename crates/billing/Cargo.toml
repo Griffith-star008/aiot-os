@@ -1,0 +1,13 @@
+[package]
+name = "billing"
+version = "0.1.0"
+edition = "2021"
+description = "Billing and Quota"
+
+[dependencies]
+aiot_core = { path = "../core" }
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

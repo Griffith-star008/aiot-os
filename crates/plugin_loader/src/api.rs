@@ -1,0 +1,35 @@
+//! Public API Interfaces
+
+//! Plugin Loader
+/// Handles loading plugins dynamically or statically.
+
+use plugin_api::{Plugin, PluginId};
+use aiot_core::{AiotError, PluginError};
+
+/// A mock plugin loader for demonstrating dynamic loading abstractions.
+pub struct PluginLoader {
+    // In a real scenario, this would hold libloading::Library handles
+}
+
+impl PluginLoader {
+    pub fn new() -> Self {
+        Self {}
+    }
+
+    /// Loads a plugin from a shared library (.so, .dll, .dylib)
+    pub fn load_dynamic(&mut self, _path: &str) -> Result<Box<dyn Plugin>, AiotError> {
+        // Mock implementation
+        Err(AiotError::Plugin(PluginError::LoadFailed))
+    }
+    
+    /// Loads a static plugin
+    pub fn load_static(&mut self, plugin: Box<dyn Plugin>) -> Result<PluginId, AiotError> {
+        Ok(plugin.id())
+    }
+}
+
+impl Default for PluginLoader {
+    fn default() -> Self {
+        Self::new()
+    }
+}

@@ -1,0 +1,13 @@
+[package]
+name = "resource_scheduler"
+version = "0.1.0"
+edition = "2021"
+description = "AIOT Resource_scheduler Module"
+
+[dependencies]
+aiot_core = { path = "../core" }
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

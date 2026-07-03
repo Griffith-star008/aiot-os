@@ -1,0 +1,8 @@
+//! Marketplace
+use aiot_core::AiotError;
+
+pub trait MarketplaceClient {
+    fn search_plugins(&self, query: &str) -> Result<Vec<String>, AiotError>;
+    fn install_plugin(&mut self, plugin_id: &str) -> Result<(), AiotError>;
+    fn install_template(&mut self, template_id: &str) -> Result<(), AiotError>;
+}

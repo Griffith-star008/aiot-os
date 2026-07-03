@@ -1,0 +1,34 @@
+#![no_std]
+#![deny(unsafe_code)]
+
+//! SDK Abstraction Layer (Enterprise Upgrade)
+//! Cung cấp giao diện đa ngôn ngữ và phân mảnh Versioning (v1, v2, v3).
+
+/// Documentation for v1.
+pub mod v1 {
+    /// Documentation for SafeAiotRuntime.
+    pub trait SafeAiotRuntime {
+        fn get_temperature(&self) -> i16;
+        fn execute_mission(&self, mission_id: u32);
+    }
+}
+
+/// Documentation for v2.
+pub mod v2 {
+    use super::v1;
+    /// Documentation for SafeAiotRuntimeV2.
+    pub trait SafeAiotRuntimeV2: v1::SafeAiotRuntime {
+        // v2 thêm tính năng Agent
+        fn spawn_agent(&self, agent_id: u32) -> Result<(), &'static str>;
+    }
+}
+
+/// Documentation for v3.
+pub mod v3 {
+    use super::v2;
+    /// Documentation for SafeAiotRuntimeV3.
+    pub trait SafeAiotRuntimeV3: v2::SafeAiotRuntimeV2 {
+        // v3 thêm tính năng Cluster và QoS
+        fn dispatch_cluster_task(&self, task_id: u32, qos_level: u8);
+    }
+}

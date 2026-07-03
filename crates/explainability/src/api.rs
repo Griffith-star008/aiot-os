@@ -1,0 +1,40 @@
+//! Public API Interfaces
+
+
+#![deny(unsafe_code)]
+
+/// Explainability Engine
+/// Giải thích lý do tại sao AI đưa ra quyết định để con người (và Auditor) có thể truy vết (Audit).
+
+/// Documentation for DecisionId.
+pub struct DecisionId(pub u64);
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for EvidenceType.
+pub enum EvidenceType {
+    ThermalThresholdReached,
+    HighFaultRate,
+    VisualObstacleDetected,
+    RuleBasedConstraint,
+}
+
+/// Documentation for ReasoningTrace.
+pub struct ReasoningTrace {
+    /// Documentation for field `decision_id`.
+    pub decision_id: DecisionId,
+    /// Documentation for field `action_taken`.
+    pub action_taken: &'static str,
+    /// Documentation for field `primary_evidence`.
+    pub primary_evidence: EvidenceType,
+    /// Documentation for field `confidence`.
+    pub confidence: u8,
+}
+
+/// Documentation for ExplainabilityEngine.
+pub trait ExplainabilityEngine {
+    /// Lưu vết quyết định (Audit Trail)
+    fn record_decision(&mut self, trace: ReasoningTrace);
+
+    /// Trích xuất lời giải thích cho một quyết định (Phục vụ Dashboard / CLI)
+    fn explain(&self, decision_id: DecisionId) -> Option<&ReasoningTrace>;
+}

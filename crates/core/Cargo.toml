@@ -1,0 +1,20 @@
+[package]
+name = "aiot_core"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+
+[features]
+default = ["minimal"]
+minimal = []
+embedded = ["minimal"]
+desktop = ["full"]
+server = ["full"]
+full = ["embedded"]
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

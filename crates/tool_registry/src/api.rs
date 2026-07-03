@@ -1,0 +1,4 @@
+//! Public API Interfaces
+
+//! Tool Registry
+pub trait AgentTool { fn execute(&self, args: &str) -> String; }

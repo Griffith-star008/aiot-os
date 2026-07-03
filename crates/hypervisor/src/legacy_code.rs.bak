@@ -1,0 +1,54 @@
+#![no_std]
+#![deny(unsafe_code)]
+
+//! Runtime Hypervisor Layer
+//! Cho phép cô lập và chạy song song nhiều Runtime Instances trên cùng phần cứng.
+
+/// Documentation for RuntimeId.
+pub struct RuntimeId(pub u32);
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for IsolationLevel.
+pub enum IsolationLevel {
+    SharedMemory,
+    Sandbox,
+    StrictPartitioning,
+}
+
+/// Documentation for VirtualMachine.
+pub struct VirtualMachine {
+    /// Documentation for field `id`.
+    pub id: RuntimeId,
+    /// Documentation for field `isolation`.
+    pub isolation: IsolationLevel,
+    /// Documentation for field `allocated_cpu_quota`.
+    pub allocated_cpu_quota: u8, // Phần trăm CPU
+    /// Documentation for field `allocated_memory_kb`.
+    pub allocated_memory_kb: u32,
+    /// Documentation for field `is_running`.
+    pub is_running: bool,
+}
+
+/// Documentation for HypervisorEngine.
+pub trait HypervisorEngine {
+    /// Sinh ra một Runtime con chạy độc lập
+    fn spawn_runtime(
+        &mut self,
+        isolation: IsolationLevel,
+        quota: u8,
+        mem_kb: u32,
+    ) -> Result<RuntimeId, HypervisorError>;
+
+    /// Hủy một Runtime nếu phát hiện hành vi xâm phạm vùng nhớ
+    fn kill_runtime(&mut self, id: RuntimeId);
+
+    /// Điều phối chia sẻ tài nguyên phần cứng (CPU, I/O) giữa các Runtime
+    fn schedule_runtimes(&mut self);
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for HypervisorError.
+pub enum HypervisorError {
+    ResourceExhausted,
+    InvalidConfiguration,
+}

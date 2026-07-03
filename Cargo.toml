@@ -1,0 +1,126 @@
+[workspace]
+members = [
+    "crates/trace_viewer",
+    "crates/cost_analyzer",
+    "crates/license_manager",
+    "crates/release_manager",
+    "crates/compatibility",
+    "crates/benchmark_engine",
+    "crates/workflow_designer",
+    "crates/dataset_validator",
+    "crates/dataset_registry",
+    "crates/resource_manager",
+    "crates/deployment_manager",
+    "crates/cluster_manager",
+    "crates/ai_gateway",
+    "crates/autoscaler",
+    "crates/deployment",
+    "crates/reranker",
+    "crates/retriever",
+    "crates/embedding",
+    "crates/dataset",
+    "crates/cost_router",
+    "crates/runtime_profiler",
+    "crates/resource_scheduler",
+    "crates/gpu_manager",
+    "crates/leaderboard",
+    "crates/evaluation",
+    "crates/module_registry",
+    "crates/ota_update",
+    "crates/edge_runtime",
+    "crates/observability",
+    "crates/autoscaling",
+    "crates/distributed_queue",
+    "crates/tool_registry",
+    "crates/rag_framework",
+    "crates/multi_model_router",
+    "crates/prompt_registry",
+    "crates/secret_manager",
+    "crates/ai_studio",
+    "crates/vector_store",
+    "crates/plugin_wasm",
+    "crates/runtime_wasm",
+    "crates/policy_engine",
+    "crates/billing",
+    "crates/tenant",
+    "crates/identity",
+    "crates/cloud_console",
+    "crates/service_discovery",
+    "crates/core",
+    "crates/runtime",
+    "crates/scheduler",
+    "crates/thermal",
+    "crates/safety",
+    "crates/security",
+    "crates/cluster",
+    "crates/cognitive",
+    "crates/memory",
+    "crates/telemetry",
+    "crates/chaos",
+    "crates/platform",
+    "crates/hal",
+    "crates/accelerator",
+    "crates/diagnostics",
+    "crates/storage",
+    "crates/compiler",
+    "crates/graph",
+    "crates/mission",
+    "crates/agents",
+    "crates/world",
+    "crates/knowledge",
+    "crates/hypervisor",
+    "crates/simulation",
+    "crates/maintenance",
+    "crates/plugins",
+    "crates/explainability",
+    "crates/evolution",
+    "crates/federated",
+    "crates/governance",
+    "crates/registry",
+    "crates/event",
+    "crates/resource",
+    "crates/network",
+    "crates/sdk",
+    "crates/cli",
+    "crates/production",
+    "crates/performance",
+    "crates/research",
+    "crates/sysconfig",
+    "crates/models",
+    "crates/resilience",
+    "crates/queue",
+    "crates/integration",
+    "crates/plugin_api",
+    "crates/plugin_sdk",
+    "crates/plugin_loader",
+    "crates/plugin_registry",
+    "crates/sdk_gen",
+    "examples/hello_world",
+    "examples/sensor_demo"
+, "crates/ai_runtime", "crates/workflow", "crates/device", "crates/transport", "crates/service_discovery", "crates/marketplace", "crates/dashboard", "crates/cloud_console"]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.80"
+
+[workspace.dependencies]
+thiserror = "2.0"
+clap = { version = "4.5", features = ["derive"] }
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+missing_docs = "allow"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+missing_errors_doc = "allow"
+unnecessary_wraps = "allow"
+unused_self = "allow"
+empty_line_after_doc_comments = "allow"
+missing_panics_doc = "allow"
+doc_markdown = "allow"
+match_same_arms = "allow"
+cast_precision_loss = "allow"
+cast_possible_truncation = "allow"
+cast_sign_loss = "allow"

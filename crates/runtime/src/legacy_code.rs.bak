@@ -1,0 +1,58 @@
+//! Runtime Abstraction Layer
+use aiot_core::AiotError;
+use core::future::Future;
+use core::pin::Pin;
+
+pub trait AiotRuntime {
+    fn spawn(&self, future: Pin<Box<dyn Future<Output = ()> + Send>>) -> Result<(), AiotError>;
+    fn delay(&self, ms: u64) -> Result<(), AiotError>;
+}
+
+pub mod adapters {
+    pub struct TokioAdapter;
+    pub struct AsyncStdAdapter;
+    pub struct WasmAdapter;
+    pub struct FreeRtosAdapter;
+    pub struct ZephyrAdapter;
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LifecycleState {
+    Created,
+    Starting,
+    Running,
+    Stopped,
+}
+
+pub struct Runtime {
+    pub current_state: LifecycleState,
+}
+
+impl Runtime {
+    pub fn transition_to(&mut self, state: LifecycleState) -> Result<(), AiotError> {
+        self.current_state = state;
+        Ok(())
+    }
+}
+
+pub struct RuntimeBuilder {
+    state: LifecycleState,
+}
+
+impl Default for RuntimeBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl RuntimeBuilder {
+    pub fn new() -> Self { Self { state: LifecycleState::Created } }
+    pub fn with_initial_state(mut self, state: LifecycleState) -> Self { 
+        self.state = state; 
+        self 
+    }
+    pub fn build(self) -> Runtime { 
+        Runtime { current_state: self.state }
+    }
+    pub fn start(&mut self) -> Result<(), AiotError> { Ok(()) }
+}

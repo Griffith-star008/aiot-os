@@ -1,0 +1,13 @@
+[package]
+name = "cloud_console"
+version = "0.1.0"
+edition = "2021"
+description = "Cloud Console API for AIoT Framework"
+
+[dependencies]
+aiot_core = { path = "../core" }
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

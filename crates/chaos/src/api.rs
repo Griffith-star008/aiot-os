@@ -1,0 +1,79 @@
+//! Public API Interfaces
+
+
+#![deny(unsafe_code)]
+
+/// Monte Carlo Safety Testing & Fault Injection Module
+/// Dùng để inject các lỗi cứng vào hệ thống nhằm test tính năng Self-Healing và DRS.
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for FaultType.
+pub enum FaultType {
+    Bitflip,
+    SensorDrift,
+    MemoryCorruption,
+    WatchdogTimeout,
+    ThermalSpike,
+    ModelCorruption,
+    QueueOverflow,
+    OomError,
+    DiskFull,
+    GpuFailure,
+    PacketLoss,
+    ClockDrift,
+    NetworkPartition,
+    RandomPanic,
+    ProcessKill,
+}
+
+/// Documentation for ChaosMonkey.
+pub struct ChaosMonkey {
+    /// Documentation for field `enabled`.
+    pub enabled: bool,
+    /// Documentation for field `seed`.
+    pub seed: u64,
+}
+
+impl ChaosMonkey {
+    /// Documentation for fn.
+    pub const fn new() -> Self {
+        Self {
+            enabled: false,
+            seed: 0xCAFE_BABE,
+        }
+    }
+
+    /// Documentation for enable.
+    pub fn enable(&mut self) {
+        self.enabled = true;
+    }
+
+    /// Documentation for inject_bitflip.
+    pub fn inject_bitflip(&self, target: &mut u32) {
+        if self.enabled {
+            *target ^= 1 << 4; // Flip bit thứ 4 để giả lập lỗi
+        }
+    }
+
+    /// Documentation for inject_thermal_spike.
+    pub fn inject_thermal_spike(&self, current_temp: &mut i16) {
+        if self.enabled {
+            *current_temp += 200; // Đột ngột tăng 20 độ C
+        }
+    }
+
+    /// Documentation for inject_sensor_failure.
+    pub fn inject_sensor_failure(&self) -> Option<i16> {
+        if self.enabled {
+            None // Giả lập mất kết nối sensor
+        } else {
+            Some(250) // Mặc định 25.0 độ
+        }
+    }
+}
+
+impl Default for ChaosMonkey {
+    fn default() -> Self {
+        Self::new()
+    }
+}

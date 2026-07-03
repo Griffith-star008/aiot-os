@@ -1,0 +1,2 @@
+//! Prompt Registry
+pub struct PromptVersion { pub version: String, pub template: String }

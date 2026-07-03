@@ -1,0 +1,52 @@
+//! Public API Interfaces
+
+
+#![deny(unsafe_code)]
+
+/// Utilities and Macros for building AIoT Plugins
+
+extern crate alloc;
+
+pub use plugin_api::{Plugin, PluginId, PluginType};
+
+/// A builder to help initialize plugin metadata
+pub struct PluginBuilder {
+    id: u32,
+    plugin_type: PluginType,
+    version: u16,
+}
+
+impl PluginBuilder {
+    pub fn new() -> Self {
+        Self {
+            id: 0,
+            plugin_type: PluginType::Custom,
+            version: 1,
+        }
+    }
+
+    pub fn with_id(mut self, id: u32) -> Self {
+        self.id = id;
+        self
+    }
+
+    pub fn with_type(mut self, pt: PluginType) -> Self {
+        self.plugin_type = pt;
+        self
+    }
+
+    pub fn with_version(mut self, version: u16) -> Self {
+        self.version = version;
+        self
+    }
+
+    pub fn build(self) -> (PluginId, PluginType, u16) {
+        (PluginId(self.id), self.plugin_type, self.version)
+    }
+}
+
+impl Default for PluginBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}

@@ -1,0 +1,47 @@
+//! Public API Interfaces
+
+
+#![deny(unsafe_code)]
+
+/// Mission Layer
+/// Runtime chạy Mission thay vì Task đơn lẻ. Hỗ trợ Behavior Tree và Workflow.
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for MissionStatus.
+pub enum MissionStatus {
+    Pending,
+    Running,
+    Success,
+    Failed,
+    Aborted,
+}
+
+/// Documentation for Mission.
+pub struct Mission {
+    /// Documentation for field `id`.
+    pub id: u32,
+    /// Documentation for field `name`.
+    pub name: &'static str,
+    /// Documentation for field `status`.
+    pub status: MissionStatus,
+}
+
+/// Documentation for MissionExecutor.
+pub trait MissionExecutor {
+    /// Bắt đầu một nhiệm vụ cấp cao
+    fn start_mission(&mut self, mission: &mut Mission) -> Result<(), MissionError>;
+
+    /// Đánh giá Behavior Tree của Mission
+    fn tick_behavior_tree(&mut self, mission_id: u32) -> MissionStatus;
+
+    /// Hủy Mission khi có nguy hiểm
+    fn abort_mission(&mut self, mission_id: u32);
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for MissionError.
+pub enum MissionError {
+    HardwareNotReady,
+    InsufficientPower,
+    SafetyViolation,
+}

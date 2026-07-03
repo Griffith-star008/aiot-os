@@ -1,0 +1,59 @@
+#![no_std]
+#![deny(unsafe_code)]
+
+//! Diagnostics Layer: Crash Analyzer & Fault Tree
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for ComponentHealth.
+pub enum ComponentHealth {
+    Healthy,
+    Degraded,
+    Failing,
+    Offline,
+}
+
+/// Documentation for HealthReport.
+pub struct HealthReport {
+    /// Documentation for field `database_health`.
+    pub database_health: ComponentHealth,
+    /// Documentation for field `storage_health`.
+    pub storage_health: ComponentHealth,
+    /// Documentation for field `gpu_health`.
+    pub gpu_health: ComponentHealth,
+    /// Documentation for field `memory_health`.
+    pub memory_health: ComponentHealth,
+    /// Documentation for field `queue_health`.
+    pub queue_health: ComponentHealth,
+    /// Documentation for field `scheduler_health`.
+    pub scheduler_health: ComponentHealth,
+    /// Documentation for field `plugin_health`.
+    pub plugin_health: ComponentHealth,
+    /// Documentation for field `cluster_health`.
+    pub cluster_health: ComponentHealth,
+}
+
+/// Documentation for HealthEndpoint.
+pub trait HealthEndpoint {
+    fn check_health(&self) -> HealthReport;
+    fn check_ready(&self) -> bool;
+    fn check_live(&self) -> bool;
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for RootCause.
+pub enum RootCause {
+    PowerFailure,
+    ThermalRunaway,
+    MemoryCorruption,
+    NetworkPartition,
+    Unknown(u32),
+}
+
+/// Nâng cấp: Crash Analyzer
+pub trait CrashAnalyzer {
+    /// Phân tích file Dump để tìm lỗi
+    fn analyze_dump(&self, dump_data: &[u8]) -> RootCause;
+
+    /// Xây dựng Fault Tree (Cây Lỗi) để truy vết ngược
+    fn build_fault_tree(&self, root_cause: RootCause) -> Option<u32>;
+}

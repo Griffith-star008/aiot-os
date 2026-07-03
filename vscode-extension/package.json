@@ -1,0 +1,28 @@
+{
+    "name": "aiot-framework-extension",
+    "displayName": "AIoT Framework",
+    "description": "Developer tools for AIoT Framework",
+    "version": "0.1.0",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "aiot.newProject",
+                "title": "AIoT: Create New Project"
+            },
+            {
+                "command": "aiot.deploy",
+                "title": "AIoT: Deploy to Device"
+            },
+            {
+                "command": "aiot.diagnostics",
+                "title": "AIoT: Run Diagnostics"
+            }
+        ]
+    }
+}

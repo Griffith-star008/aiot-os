@@ -1,0 +1,13 @@
+version: "1.0"
+services:
+  - name: "Runtime"
+    endpoints:
+      - name: "ping"
+        description: "Pings the AIoT Runtime."
+        response: "bool"
+      - name: "start"
+        description: "Starts the runtime."
+        response: "bool"
+      - name: "stop"
+        description: "Stops the runtime."
+        response: "bool"

@@ -1,0 +1,11 @@
+//! Public API Interfaces
+
+//! AI Studio
+pub struct VisualWorkflow {
+    pub nodes_json: String,
+    pub edges_json: String,
+}
+pub struct PromptBuilder {
+    pub template: String,
+    pub variables: std::vec::Vec<String>,
+}

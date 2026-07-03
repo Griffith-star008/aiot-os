@@ -1,0 +1,39 @@
+//! Public API Interfaces
+
+
+#![deny(unsafe_code)]
+
+/// Platform Layer
+/// Tách biệt Runtime khỏi hệ điều hành cụ thể (Linux, Windows, RTOS, Bare-metal).
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for OsType.
+pub enum OsType {
+    Linux,
+    Windows,
+    MacOs,
+    FreeRtos,
+    Zephyr,
+    BareMetal,
+}
+
+/// Documentation for PlatformProvider.
+pub trait PlatformProvider {
+    fn os_type(&self) -> OsType;
+
+    /// Block thread/task hiện tại
+    fn sleep_us(&self, microseconds: u64);
+
+    /// Trả về thời gian hệ thống chuẩn xác tới microsecond
+    fn system_time_us(&self) -> u64;
+
+    /// Cấp phát tài nguyên hệ thống (Memory, Threads) nếu hệ điều hành hỗ trợ
+    fn request_high_priority(&self) -> Result<(), PlatformError>;
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for PlatformError.
+pub enum PlatformError {
+    PermissionDenied,
+    NotSupportedOnBareMetal,
+}

@@ -1,0 +1,9 @@
+[package]
+name = "sensor_demo"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+runtime = { path = "../../crates/runtime" }
+plugins = { path = "../../crates/plugins" }
+aiot_core = { path = "../../crates/core" }

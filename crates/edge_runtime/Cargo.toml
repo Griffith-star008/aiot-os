@@ -1,0 +1,13 @@
+[package]
+name = "edge_runtime"
+version = "0.1.0"
+edition = "2021"
+description = "Edge Computing Runtime"
+
+[dependencies]
+aiot_core = { path = "../core" }
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

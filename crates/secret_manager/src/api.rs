@@ -1,0 +1,4 @@
+//! Public API Interfaces
+
+//! Secret Manager
+pub trait SecretProvider { fn get_secret(&self, key: &str) -> Option<String>; }

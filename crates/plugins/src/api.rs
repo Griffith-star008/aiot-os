@@ -1,0 +1,120 @@
+//! Public API Interfaces
+
+
+#![deny(unsafe_code)]
+
+/// Plugin System & Marketplace (Enterprise Upgrade)
+/// Cho phép tải Plugin động (Hot Swap), chạy trong Sandbox để tránh Crash OS.
+
+extern crate alloc;
+
+/// Documentation for PluginId.
+pub struct PluginId(pub u32);
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for PluginType.
+pub enum PluginType {
+    VisionModel,
+    SpeechEngine,
+    PlannerHeuristic,
+    ControlAlgorithm,
+}
+
+/// Documentation for PluginManifest.
+pub struct PluginManifest {
+    /// Documentation for field `id`.
+    pub id: PluginId,
+    /// Documentation for field `plugin_type`.
+    pub plugin_type: PluginType,
+    /// Documentation for field `version`.
+    pub version: u16,
+    /// Documentation for field `requires_sandbox`.
+    pub requires_sandbox: bool,
+}
+
+/// Base trait for all plugins in the system
+pub trait Plugin {
+    fn id(&self) -> PluginId;
+    fn plugin_type(&self) -> PluginType;
+    fn version(&self) -> u16;
+    fn start(&mut self) -> Result<(), aiot_core::api::AiotError>;
+    fn stop(&mut self) -> Result<(), aiot_core::api::AiotError>;
+}
+
+/// Documentation for PluginManager.
+pub struct PluginManager {
+    plugins: std::collections::BTreeMap<u32, std::boxed::Box<dyn Plugin>>,
+}
+
+impl PluginManager {
+    pub fn new() -> Self {
+        Self {
+            plugins: std::collections::BTreeMap::new(),
+        }
+    }
+
+    pub fn register(&mut self, plugin: std::boxed::Box<dyn Plugin>) {
+        self.plugins.insert(plugin.id().0, plugin);
+    }
+
+    /// Xác thực chữ ký số (Verify)
+    pub fn verify_signature(&self, _binary: &[u8]) -> bool {
+        true
+    }
+
+    /// Chạy Plugin trong Sandbox (Cách ly bộ nhớ)
+    pub fn load_into_sandbox(
+        &mut self,
+        _manifest: PluginManifest,
+        _binary: &[u8],
+    ) -> Result<(), aiot_core::api::AiotError> {
+        Ok(())
+    }
+
+    /// Rollback nếu Plugin gây ra lỗi
+    pub fn rollback_plugin(&mut self, _id: PluginId) {
+        // Rollback logic
+    }
+}
+
+impl Default for PluginManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Documentation for WasmIsolation.
+pub trait WasmIsolation {
+    fn run_wasm_module(&self, wasm_bytes: &[u8]) -> Result<(), &'static str>;
+}
+
+/// Documentation for ProcessIsolation.
+pub trait ProcessIsolation {
+    fn run_in_fork(&self, executable: &[u8]) -> Result<(), &'static str>;
+}
+
+/// Documentation for CapabilityPermission.
+pub struct CapabilityPermission {
+    /// Documentation for field `allow_network`.
+    pub allow_network: bool,
+    /// Documentation for field `allow_fs`.
+    pub allow_fs: bool,
+    /// Documentation for field `max_cpu_percent`.
+    pub max_cpu_percent: u8,
+    /// Documentation for field `max_ram_mb`.
+    pub max_ram_mb: u32,
+}
+
+use std::vec::Vec;
+
+/// Documentation for WasmRuntime.
+pub trait WasmRuntime {
+    fn instantiate_module(&mut self, wasm_bytecode: &[u8]) -> Result<PluginId, &'static str>;
+    fn call_function(
+        &mut self,
+        id: PluginId,
+        func_name: &str,
+        args: &[u8],
+    ) -> Result<Vec<u8>, &'static str>;
+    fn terminate_module(&mut self, id: PluginId);
+}

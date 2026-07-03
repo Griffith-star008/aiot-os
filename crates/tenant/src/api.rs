@@ -1,0 +1,6 @@
+//! Public API Interfaces
+
+//! Tenant Management
+pub struct Organization { pub id: String, pub name: String }
+pub struct Workspace { pub id: String, pub org_id: String }
+pub struct Project { pub id: String, pub workspace_id: String }

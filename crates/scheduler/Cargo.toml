@@ -1,0 +1,12 @@
+[package]
+name = "scheduler"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+aiot_core = { path = "../core" }
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

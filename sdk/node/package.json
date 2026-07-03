@@ -1,0 +1,11 @@
+{
+  "name": "@aiot-framework/sdk",
+  "version": "0.1.0",
+  "description": "Official Node.js SDK for the AIoT Global Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AIoT Team",
+  "license": "MIT"
+}

@@ -1,0 +1,25 @@
+//! Workflow Engine
+use aiot_core::AiotError;
+
+/// DAG Structure
+#[derive(Default)]
+pub struct DagWorkflow {
+    pub nodes: std::vec::Vec<String>,
+}
+
+/// FSM Structure
+#[derive(Default)]
+pub struct FsmWorkflow {
+    pub states: std::vec::Vec<String>,
+}
+
+pub trait Executor {
+    fn execute(&self) -> Result<(), AiotError>;
+    fn checkpoint(&self) -> Result<std::vec::Vec<u8>, AiotError>;
+    fn rollback(&mut self, state: &[u8]) -> Result<(), AiotError>;
+}
+
+pub mod parsers {
+    pub struct JsonParser;
+    pub struct YamlParser;
+}

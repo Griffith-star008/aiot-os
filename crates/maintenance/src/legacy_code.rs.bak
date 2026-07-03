@@ -1,0 +1,33 @@
+#![no_std]
+#![deny(unsafe_code)]
+
+//! Predictive Maintenance Layer
+//! Học dữ liệu Telemetry để dự đoán khi nào linh kiện vật lý (Quạt, SSD, Sensor) sắp hỏng.
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for ComponentType.
+pub enum ComponentType {
+    CoolingFan,
+    TemperatureSensor,
+    SsdStorage,
+    GpuAccelerator,
+}
+
+/// Documentation for MaintenancePrediction.
+pub struct MaintenancePrediction {
+    /// Documentation for field `component`.
+    pub component: ComponentType,
+    /// Documentation for field `estimated_time_to_failure_hours`.
+    pub estimated_time_to_failure_hours: u32,
+    /// Documentation for field `confidence_score`.
+    pub confidence_score: u8,
+}
+
+/// Documentation for PredictiveMaintenanceEngine.
+pub trait PredictiveMaintenanceEngine {
+    /// Nạp dữ liệu cảm biến / đo đạc lịch sử
+    fn feed_telemetry_data(&mut self, component: ComponentType, data_point: u32);
+
+    /// Chạy mô hình dự đoán (Có thể gọi sang AI Accelerator)
+    fn predict_failures(&self) -> Option<MaintenancePrediction>;
+}

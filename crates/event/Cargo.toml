@@ -1,0 +1,12 @@
+[package]
+name = "event"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aiot_core = { path = "../core" }
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

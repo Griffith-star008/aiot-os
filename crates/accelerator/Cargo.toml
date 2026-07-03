@@ -1,0 +1,11 @@
+[package]
+name = "accelerator"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

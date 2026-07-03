@@ -1,0 +1,12 @@
+//! Public API Interfaces
+
+//! Vector Store
+pub trait VectorDatabase {
+    fn upsert(&mut self, id: &str, vector: &[f32], payload: &str) -> Result<(), aiot_core::api::AiotError>;
+    fn search(&self, vector: &[f32], top_k: usize) -> Result<std::vec::Vec<String>, aiot_core::api::AiotError>;
+}
+pub mod adapters {
+    pub struct MilvusAdapter;
+    pub struct QdrantAdapter;
+    pub struct PgVectorAdapter;
+}

@@ -1,0 +1,118 @@
+#![no_std]
+#![deny(unsafe_code)]
+
+//! Reinforcement Learning Scheduler (Depth Upgrade)
+//! Lập lịch thông qua Học Tăng Cường thay vì EDF cứng nhắc.
+
+/// Documentation for TaskEnvironmentState.
+pub struct TaskEnvironmentState {
+    /// Documentation for field `pending_tasks`.
+    pub pending_tasks: u16,
+    /// Documentation for field `cpu_utilization`.
+    pub cpu_utilization: u8,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for SchedulingAction.
+pub enum SchedulingAction {
+    ExecuteHighPriority,
+    ExecuteLowPriority,
+    DropLowestPriority,
+    EnterPowerSaving,
+}
+
+/// RL Scheduler sử dụng Q-Learning / PPO để tối ưu hóa quyết định điều phối.
+pub trait RlSchedulerEngine {
+    fn observe_state(&self) -> TaskEnvironmentState;
+    fn select_action(&mut self, state: &TaskEnvironmentState) -> SchedulingAction;
+    fn update_policy(&mut self, action: SchedulingAction, reward: i16);
+}
+
+/// Base trait for all schedulers
+pub trait TaskScheduler {
+    fn start(&mut self) -> Result<(), aiot_core::AiotError>;
+    fn stop(&mut self) -> Result<(), aiot_core::AiotError>;
+    fn schedule_task(&mut self, task_id: u64) -> Result<(), aiot_core::AiotError>;
+}
+
+/// Documentation for AutonomousScheduler.
+pub struct AutonomousScheduler {
+    /// Documentation for field `learning_rate`.
+    pub learning_rate: f32,
+}
+
+impl AutonomousScheduler {
+    /// Create a new autonomous scheduler
+    pub fn new() -> Self {
+        Self {
+            learning_rate: 0.01,
+        }
+    }
+}
+
+impl TaskScheduler for AutonomousScheduler {
+    fn start(&mut self) -> Result<(), aiot_core::AiotError> {
+        Ok(())
+    }
+
+    fn stop(&mut self) -> Result<(), aiot_core::AiotError> {
+        Ok(())
+    }
+
+    fn schedule_task(&mut self, _task_id: u64) -> Result<(), aiot_core::AiotError> {
+        Ok(())
+    }
+}
+
+/// Builder for AutonomousScheduler
+pub struct SchedulerBuilder {
+    learning_rate: f32,
+}
+
+impl SchedulerBuilder {
+    pub fn new() -> Self {
+        Self {
+            learning_rate: 0.01,
+        }
+    }
+
+    pub fn with_learning_rate(mut self, rate: f32) -> Self {
+        self.learning_rate = rate;
+        self
+    }
+
+    pub fn build(self) -> AutonomousScheduler {
+        AutonomousScheduler {
+            learning_rate: self.learning_rate,
+        }
+    }
+}
+
+impl Default for SchedulerBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Default for AutonomousScheduler {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl RlSchedulerEngine for AutonomousScheduler {
+    fn observe_state(&self) -> TaskEnvironmentState {
+        TaskEnvironmentState {
+            pending_tasks: 0,
+            cpu_utilization: 0,
+        }
+    }
+
+    fn select_action(&mut self, _state: &TaskEnvironmentState) -> SchedulingAction {
+        SchedulingAction::EnterPowerSaving
+    }
+
+    fn update_policy(&mut self, _action: SchedulingAction, _reward: i16) {
+        // dummy
+    }
+}

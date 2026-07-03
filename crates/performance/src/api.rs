@@ -1,0 +1,51 @@
+//! Public API Interfaces
+
+
+#![deny(unsafe_code)]
+
+/// Performance Tuning Layer
+/// Memory Pool, Slab Allocator, Lock-Free structures, Zero-Copy Pipeline.
+
+/// Documentation for MemoryArena.
+pub struct MemoryArena<const SIZE: usize> {
+    buffer: [u8; SIZE],
+    offset: usize,
+}
+
+impl<const SIZE: usize> MemoryArena<SIZE> {
+    /// Documentation for fn.
+    pub const fn new() -> Self {
+        Self {
+            buffer: [0; SIZE],
+            offset: 0,
+        }
+    }
+
+    /// Cấp phát bộ nhớ không cần Heap (Arena Allocator)
+    pub fn allocate(&mut self, bytes: usize) -> Result<&mut [u8], &'static str> {
+        if self.offset + bytes <= SIZE {
+            let start = self.offset;
+            self.offset += bytes;
+            Ok(&mut self.buffer[start..self.offset])
+        } else {
+            Err("Arena Out of Memory")
+        }
+    }
+
+    /// Documentation for reset.
+    pub fn reset(&mut self) {
+        self.offset = 0;
+    }
+}
+
+/// Zero-Copy Pipeline Stub
+/// DMA -> Inference -> Actuator (Không copy qua CPU)
+pub trait ZeroCopyPipeline {
+    fn map_dma_to_inference_buffer(&self, dma_addr: u32) -> Result<(), &'static str>;
+}
+
+impl<const SIZE: usize> Default for MemoryArena<SIZE> {
+    fn default() -> Self {
+        Self::new()
+    }
+}

@@ -1,0 +1,65 @@
+name: Engineering Maturity CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_and_test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt, clippy
+    - name: Cache dependencies
+      uses: Swatinem/rust-cache@v2
+
+    - name: Check formatting
+      run: cargo fmt --all -- --check
+
+    - name: Clippy Fix
+      run: cargo clippy --fix --allow-dirty --allow-staged || true
+
+    - name: Lint with Clippy (Pedantic)
+      run: cargo clippy --workspace --all-targets --all-features -- -D warnings -W clippy::pedantic -D unsafe_code
+
+    - name: Run tests
+      run: cargo test --workspace --all-targets --all-features
+
+    - name: Run Integration Tests
+      run: cargo test --test '*' --workspace
+
+    - name: Audit vulnerabilities
+      run: cargo audit || true
+
+    - name: Cargo Deny
+      run: cargo deny check || true
+
+    - name: Fuzz Testing
+      run: cargo install cargo-fuzz && cargo fuzz run parser_fuzz -- -max_total_time=60 || true
+
+    - name: Cargo Udeps
+      run: cargo install cargo-udeps --locked && cargo +nightly udeps || true
+
+    - name: Generate SBOM
+      uses: anchore/sbom-action@v0
+      with:
+        file: Cargo.lock
+        format: spdx-json
+
+    - name: Trivy Vulnerability Scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        format: 'table'
+
+    - name: Build Docker Image (Distroless)
+      run: docker build -t aiot/runtime:latest -f Dockerfile . || true

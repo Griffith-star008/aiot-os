@@ -1,0 +1,10 @@
+[book]
+authors = ["AIoT Framework Team"]
+language = "en"
+multilingual = false
+src = "src"
+title = "AIoT Global Framework Documentation"
+
+[output.html]
+mathjax-support = true
+git-repository-url = "https://github.com/aiot-framework/aiot"

@@ -1,0 +1,11 @@
+//! Public API Interfaces
+
+//! Dashboard
+use aiot_core::api::AiotError;
+
+pub trait DashboardApi {
+    fn get_runtime_status(&self) -> Result<String, AiotError>;
+    fn get_telemetry_metrics(&self) -> Result<String, AiotError>;
+    fn get_logs(&self) -> Result<Vec<String>, AiotError>;
+    fn get_cluster_overview(&self) -> Result<String, AiotError>;
+}

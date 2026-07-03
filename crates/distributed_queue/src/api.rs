@@ -1,0 +1,4 @@
+//! Public API Interfaces
+
+//! Distributed Queue
+pub trait MessageQueue { fn publish(&self, msg: &[u8]); fn consume(&self) -> std::vec::Vec<u8>; }

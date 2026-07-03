@@ -1,0 +1,100 @@
+#![no_std]
+#![deny(unsafe_code)]
+
+//! Persistent Task Queue (P0)
+//! Ensures that the scheduler doesn't lose tasks during restarts.
+
+extern crate alloc;
+
+use aiot_core::{AiotError, SchedulerError};
+use alloc::collections::VecDeque;
+use alloc::vec::Vec;
+
+/// Documentation for persistent.
+pub mod persistent;
+/// Exported module/item.
+pub use persistent::DiskPersistentQueue;
+
+#[derive(Clone, Debug, PartialEq)]
+/// Documentation for QueuedTask.
+pub struct QueuedTask {
+    /// Documentation for field `task_id`.
+    pub task_id: u64,
+    /// Documentation for field `payload`.
+    pub payload: Vec<u8>,
+    /// Documentation for field `priority`.
+    pub priority: u8,
+}
+
+/// A trait defining operations for a Persistent Queue
+pub trait PersistentTaskQueue {
+    /// Enqueue a task to be persistently stored.
+    fn enqueue(&mut self, task: QueuedTask) -> Result<(), AiotError>;
+
+    /// Dequeue a task.
+    fn dequeue(&mut self) -> Result<Option<QueuedTask>, AiotError>;
+
+    /// Acknowledge the task is completed (removes from persistent storage).
+    fn ack(&mut self, task_id: u64) -> Result<(), AiotError>;
+
+    /// Requeue tasks that were dequeued but not acked after a timeout.
+    fn recover_unacked(&mut self) -> Result<(), AiotError>;
+}
+
+/// An in-memory robust mock implementation of `PersistentTaskQueue` for #![`no_std`].
+/// In a standard production environment, this would be backed by `SQLite` or Redis.
+pub struct InMemoryPersistentQueue {
+    ready_queue: VecDeque<QueuedTask>,
+    processing_queue: Vec<QueuedTask>,
+    capacity: usize,
+}
+
+impl InMemoryPersistentQueue {
+    #[must_use]
+    /// Documentation for new.
+    pub fn new(capacity: usize) -> Self {
+        Self {
+            ready_queue: VecDeque::with_capacity(capacity),
+            processing_queue: Vec::new(),
+            capacity,
+        }
+    }
+}
+
+impl PersistentTaskQueue for InMemoryPersistentQueue {
+    fn enqueue(&mut self, task: QueuedTask) -> Result<(), AiotError> {
+        if self.ready_queue.len() >= self.capacity {
+            return Err(AiotError::Scheduler(SchedulerError::QueueFull));
+        }
+        self.ready_queue.push_back(task);
+        Ok(())
+    }
+
+    fn dequeue(&mut self) -> Result<Option<QueuedTask>, AiotError> {
+        if let Some(task) = self.ready_queue.pop_front() {
+            self.processing_queue.push(task.clone());
+            Ok(Some(task))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn ack(&mut self, task_id: u64) -> Result<(), AiotError> {
+        if let Some(idx) = self
+            .processing_queue
+            .iter()
+            .position(|t| t.task_id == task_id)
+        {
+            self.processing_queue.remove(idx);
+        }
+        Ok(())
+    }
+
+    fn recover_unacked(&mut self) -> Result<(), AiotError> {
+        // Move everything from processing back to ready
+        while let Some(task) = self.processing_queue.pop() {
+            self.ready_queue.push_front(task);
+        }
+        Ok(())
+    }
+}

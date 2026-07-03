@@ -1,0 +1,2 @@
+//! CLI Application
+pub enum AiotCommand { New, Build, Run, Test, Doctor, Plugin, Publish, Upgrade }

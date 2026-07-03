@@ -1,0 +1,133 @@
+#![no_std]
+#![deny(unsafe_code)]
+
+//! Cognitive AI Infrastructure (Depth Upgrade)
+//! Symbolic + Neural Reasoning & Cognitive Planner
+
+extern crate alloc;
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for ReasoningType.
+pub enum ReasoningType {
+    NeuralIntuition, // Suy luận nhanh nhưng có thể ảo giác (Deep Learning)
+    SymbolicLogic,   // Suy luận chậm nhưng logic chính xác tuyệt đối (Rules/Math)
+}
+/// Documentation for router.
+pub mod router;
+
+/// Exported module/item.
+pub use router::{ModelProvider, MultiModelRouter, RoutingRequest};
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// Documentation for SymbolicRule.
+pub struct SymbolicRule {
+    /// Documentation for field `min_threshold`.
+    pub min_threshold: u32,
+    /// Documentation for field `max_threshold`.
+    pub max_threshold: u32,
+    /// Documentation for field `must_be_even`.
+    pub must_be_even: bool,
+}
+
+/// Documentation for CognitivePlanner.
+pub struct CognitivePlanner {
+    /// Documentation for field `allow_hallucination`.
+    pub allow_hallucination: bool,
+    /// Documentation for field `rule`.
+    pub rule: SymbolicRule,
+}
+
+impl CognitivePlanner {
+    /// Documentation for fn.
+    pub const fn new(rule: SymbolicRule) -> Self {
+        Self {
+            allow_hallucination: false,
+            rule,
+        }
+    }
+
+    /// Kỹ thuật Neuro-Symbolic AI
+    /// Dùng Mạng Neural để dự đoán, sau đó dùng Symbolic Logic để xác minh.
+    pub fn neuro_symbolic_reasoning(&self, input_vector: &[f32; 128]) -> Result<u32, &'static str> {
+        // Giả lập Neural Network đưa ra một giải pháp (ví dụ ID của Node)
+        // Trong thực tế sẽ là quá trình nhân ma trận trọng số
+        let neural_guess = (input_vector[0] * 10.0) as u32;
+
+        // Dùng Symbolic Logic (Luật lệ cứng) để Validate giải pháp đó
+        if self.allow_hallucination || self.validate_with_symbolic_rules(neural_guess) {
+            Ok(neural_guess)
+        } else {
+            Err("Symbolic Logic rejected the Neural Intuition (Prevented Hallucination)")
+        }
+    }
+
+    fn validate_with_symbolic_rules(&self, guess: u32) -> bool {
+        // Thực thi các thuật toán logic để chặn Hallucination
+        if guess < self.rule.min_threshold || guess > self.rule.max_threshold {
+            return false;
+        }
+        if self.rule.must_be_even && (guess & 1) != 0 {
+            return false;
+        }
+        true
+    }
+}
+
+impl Default for CognitivePlanner {
+    fn default() -> Self {
+        Self::new(SymbolicRule {
+            min_threshold: 0,
+            max_threshold: 100,
+            must_be_even: false,
+        })
+    }
+}
+
+/// Documentation for ContextCache.
+pub trait ContextCache {
+    fn cache_context(&mut self, key: &[u8; 32], context: &[u8]) -> Result<(), &'static str>;
+    fn get_cached_context(&self, key: &[u8; 32]) -> Option<&[u8]>;
+    fn evict_oldest(&mut self);
+}
+
+/// Documentation for RagMonitoring.
+pub trait RagMonitoring {
+    fn log_recall_score(&mut self, score: f32);
+    fn log_latency(&mut self, ms: u32);
+    fn check_index_health(&self) -> bool;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_neuro_symbolic_reasoning_success() {
+        let planner = CognitivePlanner::new(SymbolicRule {
+            min_threshold: 10,
+            max_threshold: 100,
+            must_be_even: true,
+        });
+
+        let mut input = [0.0; 128];
+        input[0] = 2.0; // 2.0 * 10.0 = 20, which is >= 10, <= 100, and even
+
+        assert_eq!(planner.neuro_symbolic_reasoning(&input), Ok(20));
+    }
+
+    #[test]
+    fn test_neuro_symbolic_reasoning_rejected_hallucination() {
+        let planner = CognitivePlanner::new(SymbolicRule {
+            min_threshold: 10,
+            max_threshold: 100,
+            must_be_even: true,
+        });
+
+        let mut input = [0.0; 128];
+        input[0] = 2.1; // 2.1 * 10.0 = 21, which is NOT even -> Hallucination rejected
+
+        assert_eq!(
+            planner.neuro_symbolic_reasoning(&input),
+            Err("Symbolic Logic rejected the Neural Intuition (Prevented Hallucination)")
+        );
+    }
+}

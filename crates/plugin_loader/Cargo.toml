@@ -1,0 +1,13 @@
+[package]
+name = "plugin_loader"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+plugin_api = { path = "../plugin_api" }
+aiot_core = { path = "../core" }
+
+[package.metadata.aiot]
+framework = "aiot"
+framework_version = "1"
+sdk = "1"

@@ -1,0 +1,11 @@
+//! Public API Interfaces
+
+#![allow(unsafe_code)]
+/// Accelerator Layer
+
+/// Executes kernel
+/// # Safety
+/// Kernel ptr must be valid.
+pub unsafe fn execute_kernel(ptr: *const u8) {
+    let _ = *ptr;
+}

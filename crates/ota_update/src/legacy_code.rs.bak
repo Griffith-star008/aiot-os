@@ -1,0 +1,2 @@
+//! OTA Update
+pub struct OtaManager { pub current_version: String }

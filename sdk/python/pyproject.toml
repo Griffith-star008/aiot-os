@@ -1,0 +1,5 @@
+[project]
+name = "aiot-py"
+version = "0.1.0"
+description = "AIoT Framework Python SDK"
+dependencies = []

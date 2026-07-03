@@ -1,0 +1,10 @@
+//! Public API Interfaces
+
+//! Cloud Console
+use aiot_core::api::AiotError;
+
+pub trait CloudConsoleApi {
+    fn get_fleet_status(&self) -> Result<String, AiotError>;
+    fn trigger_ota(&mut self, target_version: &str) -> Result<(), AiotError>;
+    fn deploy_workload(&mut self, workload_config: &str) -> Result<(), AiotError>;
+}

@@ -1,0 +1,24 @@
+//! Event Bus
+use aiot_core::AiotError;
+
+#[derive(Clone, Debug)]
+pub struct Command {
+    pub name: String,
+}
+
+#[derive(Clone, Debug)]
+pub struct Query {
+    pub query_string: String,
+}
+
+#[derive(Clone, Debug)]
+pub struct Event {
+    pub topic: String,
+    pub payload: std::vec::Vec<u8>,
+}
+
+pub trait EventBus {
+    fn publish(&self, event: Event) -> Result<(), AiotError>;
+    fn subscribe(&mut self, topic: &str) -> Result<(), AiotError>;
+    fn send_command(&self, cmd: Command) -> Result<(), AiotError>;
+}

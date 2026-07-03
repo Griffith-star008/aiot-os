@@ -1,0 +1,3 @@
+//! Observability
+pub trait Tracer { fn trace(&self, span: &str); }
+pub trait Metric { fn record(&self, value: f64); }

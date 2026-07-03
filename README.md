@@ -1,83 +1,300 @@
+# AIOT
+
 <div align="center">
-  <h1>AIoT Global Framework</h1>
-  <p>A modular, high-performance, edge-to-cloud AIoT framework written in Rust.</p>
-  
-  [![Status](https://img.shields.io/badge/Status-Beta-yellow)](#)
-  [![License](https://img.shields.io/badge/License-MIT-green)](#)
-  [![Rust](https://img.shields.io/badge/Rust-1.80%2B-orange)](#)
+
+**A Modular AI Operating Platform for Edge, Cloud, Robotics and AIoT**
+
+High-performance • Plugin-based • Distributed • AI Native • Built with Rust
+
+![Rust](https://img.shields.io/badge/Rust-2021-orange)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue)
+![Platform](https://img.shields.io/badge/Platform-Cross--Platform-green)
+
 </div>
 
 ---
 
-## 📖 Introduction
+# Overview
 
-The **AIoT Global Framework** is an enterprise-grade platform designed for building distributed, scalable, and resilient AIoT (Artificial Intelligence of Things) applications. Built purely in Rust, it emphasizes a **Trait-First** architecture, zero-cost abstractions, and memory safety.
+AIOT is an open-source AI Operating Platform designed to simplify building intelligent applications across Edge, Cloud, Robotics and IoT environments.
 
-Whether you are deploying lightweight agents on an Edge device or coordinating distributed AI workloads across a Cloud-Native Kubernetes cluster, the AIoT Framework provides the robust scaffolding you need.
+Instead of providing only an AI runtime, AIOT offers a complete ecosystem including:
 
-## ✨ Features
+- AI Runtime
+- Workflow Engine
+- Plugin Framework
+- Distributed Runtime
+- Edge Runtime
+- AI Studio
+- RAG Framework
+- Enterprise Platform
+- Device Framework
+- Cloud Integration
 
-- 🏗️ **Dependency Injection Core**: True `DiContainer` allowing loosely coupled architectures via Type-Safe trait injection.
-- 🧩 **Robust Plugin Ecosystem**: Develop, load, and hot-swap plugins using our standardized Plugin Manifests (`plugin.toml`) and lifecycles.
-- ⚡ **High Performance Runtime**: Predictable execution with minimal overhead (< 2% CPU, < 10MB Base Memory).
-- 🧠 **AI First**: Built-in support for orchestrating Cognitive planners, LLMs, and Vision models.
-- 🛡️ **Resilience**: Integrated Chaos Engineering, Circuit Breakers, and exponential backoff Retry frameworks.
-- 📊 **Telemetry & SRE**: First-class support for OpenTelemetry, Metrics, Distributed Tracing, and strict SLA Error Budgets.
-- ☁️ **Cloud Native**: Helm charts and Kubernetes manifests provided out-of-the-box for production scale.
+---
 
-## 🏗️ Architecture
+# Features
 
-The framework operates on a strict multi-layered architecture to enforce clean dependency flow:
+- Modular architecture
+- AI-first runtime
+- Plugin ecosystem
+- Workflow orchestration
+- Multi-model routing
+- RAG framework
+- Edge AI
+- Distributed execution
+- WASM support
+- Enterprise-ready
+- Cross-platform
+- Built with Rust
+
+---
+
+# Architecture
 
 ```
-Application (CLI, Examples, Services)
-         ↓
-SDK (Python, Go, Rust Client - WIP)
-         ↓
-Runtime (DI Container, Lifecycle)
-         ↓
-Subsystems (Scheduler, Storage, Telemetry, Cluster)
-         ↓
-Core (AiotError, Traits)
+Applications
+        │
+CLI / SDK / Dashboard
+        │
+Workflow / Plugins
+        │
+AI Runtime
+        │
+Distributed Runtime
+        │
+Core Runtime
 ```
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) and our [Docs Portal](docs/) for deep dives.
+---
 
-## 🚀 Quick Start
+# Project Structure
 
-### Prerequisites
-- Rust `1.80+`
-- (Optional) `uv` for Python SDK / tooling.
+```
+AIOT/
 
-### Installation & Scaffolding
-Get started immediately using our CLI tool to generate a new AIoT Plugin:
+├── crates/
+├── docs/
+├── examples/
+├── scripts/
+├── tools/
+├── Cargo.toml
+└── README.md
+```
+
+---
+
+# Requirements
+
+- Rust stable
+- Cargo
+- Git
+
+Check version
 
 ```bash
-# Build the Developer CLI
-cargo build -p cli --release
-
-# Scaffold a new AIoT Plugin
-./target/release/cli new plugin my_first_plugin
+rustc --version
+cargo --version
 ```
 
-### Running Examples
-We provide examples to demonstrate core capabilities.
+---
+
+# Installation
+
+Clone repository
+
 ```bash
-# Run the Hello World DI Container example
-cargo run -p examples --bin hello_world
+git clone https://github.com/Griffith-star008/aiot-os.git
 ```
 
-## 🗺️ Roadmap
+Go to project
 
-We have a clear path to becoming a mature global framework.
-Check out our [ROADMAP.md](ROADMAP.md) for detailed milestones (v0.8 through v2.0).
+```bash
+cd aiot-os
+```
 
-## 🤝 Contributing
+Build
 
-We welcome contributions from the community!
-- Read our [CONTRIBUTING.md](CONTRIBUTING.md).
-- Check our [RFCs and ADRs](docs/) before proposing major architectural changes.
+```bash
+cargo build
+```
 
-## 📝 License
+Release build
 
-Distributed under the MIT License.
+```bash
+cargo build --release
+```
+
+---
+
+# Quick Start
+
+Run all tests
+
+```bash
+cargo test
+```
+
+Format source
+
+```bash
+cargo fmt
+```
+
+Lint
+
+```bash
+cargo clippy
+```
+
+Build documentation
+
+```bash
+cargo doc --open
+```
+
+---
+
+# Examples
+
+Run example
+
+```bash
+cargo run --example hello_world
+```
+
+or
+
+```bash
+cargo run --example workflow
+```
+
+Example source is located in:
+
+```
+examples/
+```
+
+---
+
+# Using AIOT
+
+Typical workflow
+
+```
+Create Project
+
+↓
+
+Create Workflow
+
+↓
+
+Register Plugins
+
+↓
+
+Load AI Models
+
+↓
+
+Deploy Runtime
+
+↓
+
+Monitor
+
+↓
+
+Scale
+```
+
+---
+
+# Documentation
+
+| Document | Description |
+|-----------|-------------|
+| Architecture | Overall architecture |
+| Cookbook | Practical examples |
+| API | API reference |
+| Plugin Guide | Build plugins |
+| Workflow Guide | Create workflows |
+| SDK Guide | SDK usage |
+| Security | Security model |
+| Performance | Optimization guide |
+
+---
+
+# Roadmap
+
+- Alpha
+- Beta
+- Stable
+- Enterprise
+- Cloud Platform
+
+---
+
+# Contributing
+
+We welcome contributions from the community.
+
+Please read:
+
+- CONTRIBUTING.md
+- CODE_OF_CONDUCT.md
+
+---
+
+# Development
+
+Run formatting
+
+```bash
+cargo fmt
+```
+
+Run linter
+
+```bash
+cargo clippy
+```
+
+Run tests
+
+```bash
+cargo test
+```
+
+Run benchmarks
+
+```bash
+cargo bench
+```
+
+---
+
+# License
+
+Licensed under Apache License 2.0.
+
+See LICENSE for details.
+
+---
+
+# Community
+
+- GitHub Issues
+- GitHub Discussions
+- Pull Requests
+
+Contributions are always welcome.
+
+---
+
+<div align="center">
+
+Built with ❤️ using Rust.
+
+</div>
